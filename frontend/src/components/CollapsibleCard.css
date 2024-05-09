@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.card {
+    /* border: 2px solid #666;
+    border-radius: 12px; */
+    margin: auto;
+    overflow: hidden;
+    border: none;
+
+    color: #fff;
+    width: 80%;
+    background-color: transparent;
+    max-width: 400px;
+    font-family: "Poppins"; /* Sets the font family */
+    font-size: 14px; /* Sets a smaller font size */
+    /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; */
+  }
+  .toggle-icon {
+    transition: transform 0.3s ease; /* Smooth rotation transition */
+    cursor: pointer; /* Optional, if you want the cursor to change on hover */
+    /* Set any necessary dimensions for your icon */
+    width: 40px;
+    height: 40px;
+  }
+
+
+  /*.card:hover {*/
+  /*  transform: translateY(-5px);*/
+  /*  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);*/
+  /*}*/
+
+  .card-header {
+
+    padding: 16px 24px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .card-body {
+    padding: 24px;
+
+    color: #ccc;
+  }
+
+.card-image {
+  width: 100%;
+  height: 230px; /* Set a fixed height */
+  object-fit: cover; /* Cover the area without stretching the image */
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+  .card-text {
+    margin-bottom: 20px;
+    line-height: 1.6;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .card-actions {
+    display: flex;
+    justify-content: space-between; /* Center the buttons */
+    padding: 20px 0;
+  }
+
+
+.action-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: none;
+  width: 161px; /* Set the width to 161px */
+  height: 40px; /* Set the height to 40px */
+  border-radius: 100px; /* Makes the corners rounded */
+  cursor: pointer;
+  display: flex; /* Use flexbox for aligning image and text */
+  align-items: center; /* Align the items vertically */
+  justify-content: center; /* Center the content horizontally */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin: 0.5em; /* Add space around buttons, adjust as needed */
+}
+.action-btn + .action-btn {
+  margin-left: 1em; /* Adds space to the left of each button, except the first */
+}
+
+
+  .save-btn {
+    color: #4de752; /* Green text color */
+  }
+
+  .action-btn:hover {
+    background-color: #555;
+    transform: scale(1.05);
+  }
+
+  .day-number {
+    font-weight: bold;
+  }
+
+  .toggle-icon {
+    font-size: 1.2rem;
+  }
+
