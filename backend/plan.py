@@ -58,7 +58,7 @@ Evening: Have a traditional Russian dinner and prepare for departure). this is j
         messages=[
             {
                 "role": "user",
-                "content": f"Return prominent monument or place name from this text, except for city names from this text and return it in this format in python string separated by commas format. Just the string nothing else, no need for a variable name. no need to add the python format. here is the text {msgg}. Here is an example of a good itinerary ",
+                "content": f"Return {int(num_days)+4} number of prominent monument or place name from this text, except for city names from this text and return it in this format in python string separated by commas format. Just the string nothing else, no need for a variable name. no need to add the python format. here is the text {msgg}. Here is an example of a good itinerary ",
             }
         ],
         model=mod,

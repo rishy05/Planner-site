@@ -17,7 +17,7 @@ def get_image(q, n):
     if len(q.split(", ")) <= n:
         qq == q.split(", ")
     else:
-        qq = random.sample(q.split(", "), k=n)
+        qq = q.split(", ")[:n]
     print("Printing qq")
     print(qq)
     for query in qq:
