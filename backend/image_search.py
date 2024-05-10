@@ -1,6 +1,8 @@
 from googleapiclient.discovery import build
 import os
 from dotenv import load_dotenv
+import random
+
 
 load_dotenv()
 API_KEY = os.getenv("API_GOOGLE")
@@ -9,10 +11,16 @@ SEARCH_ENGINE_ID = os.getenv("GOOGLE_ENGINE")
 service = build("customsearch", "v1", developerKey=API_KEY)
 
 
-def get_image(q):
+def get_image(q, n):
 
     img_1 = []
-    for query in q:
+    if len(q.split(", ")) <= n:
+        qq == q.split(", ")
+    else:
+        qq = random.sample(q.split(", "), k=n)
+    print("Printing qq")
+    print(qq)
+    for query in qq:
         start = 1
         num = 1
         response = (
@@ -33,3 +41,6 @@ def get_image(q):
         return img_1
     else:
         return [None]
+
+
+# print(get_image(["taj mahal", "marina beach", "great barrier reef"], 2))

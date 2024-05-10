@@ -4,6 +4,10 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { useState, useEffect } from 'react';
 import { Loader } from '../Loader'; // Use named import instead.
 
+
+// const [da, setDa] = useState('')
+
+// var dat = ''
 const Form = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false); // State to control the loader
@@ -44,10 +48,10 @@ const Form = () => {
               throw new Error('Network response was not ok');
             }
       
-            const data = await res.json();
+            const dat = await res.json();
+            // console.log(dat) 
 
-            console.log(data)
-          } catch (error) {
+        } catch (error) {
             console.error('Error:', error);
           }
         setLoading(true); // Show the loader when the form is submitted
@@ -76,6 +80,7 @@ const Form = () => {
     };
 
 
+
     // Animation settings for each form field
     const fieldVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -102,6 +107,18 @@ const Form = () => {
                     </motion.h2>
                     <form className="w-full max-w-lg" onSubmit={handleSubmit}>
                         {/* Origin Field */}
+
+                        <motion.div
+                            variants={fieldVariants}
+                            initial="hidden"
+                            animate="visible"
+                            custom={0}
+                            className="flex flex-wrap -mx-3 mb-6"
+                        >
+
+                        </motion.div>
+
+
                         <motion.div
                             variants={fieldVariants}
                             initial="hidden"
@@ -185,4 +202,8 @@ const Form = () => {
     );
 };
 
+// console.log(da)
+
+// export const fromData = da;
+// export const formData = dat;
 export default Form;

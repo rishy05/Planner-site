@@ -16,8 +16,8 @@ L.Icon.Default.mergeOptions({
     shadowUrl: markerShadow,
 });
 
-const Map = ({ locations }) => {
-    const defaultPosition = [31.6340, 74.8723]; // Default to Amritsar center if no specific locations
+const Mapss = ({ locations }) => {
+    const defaultPosition = locations; // Default to Amritsar center if no specific locations
 
     return (
         <MapContainer center={defaultPosition} zoom={13} scrollWheelZoom={false} style={{ height: '400px', width: '100%' }}>

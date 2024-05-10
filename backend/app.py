@@ -7,6 +7,9 @@ from plan import get_plan, modify
 from image_search import get_image
 from search import get_searchh
 from safety import get_crime
+from pprint import pprint
+from geo import get_coor
+from plan import summarize
 
 app = Flask(__name__)
 
@@ -75,21 +78,49 @@ def get_all():
     desti = data.get("desti")
     vibe = data.get("vibe")
     num_days = data.get("num_days")
+    namee = data.get("name")
+
     print(origin, desti, vibe, num_days)
     plan = get_plan(origin, desti, vibe, num_days)
     desc = plan[0]
     places = plan[1]
     iti = {}
     d = desc.split("Day ")
-
+    print(d)
     for i in d:
-        if i != "":
-            iti[f"Day {i[:2]}"] = i[2:]
+        for j in i:
+            if j == ".":
+                i.replace(j, "\n")
+    sum_list = summarize(d[1:])
+    coo = get_coor(desti)
+    print("GAYYYYYYYYYY")
+    print(coo)
+    print("GAYYYYYYYYYYY")
+    iti["desc"] = d[1:]
     iti["Places"] = places
-    img = get_image(places)
-
+    img = get_image(places, int(num_days))
     iti["image_links"] = img
+    iti["num"] = num_days
+    iti["desti"] = desti
+    iti["origin"] = origin
+    iti["coor"] = coo
+    iti["safety"] = get_crime(desti)
+    iti["summarize"] = sum_list
+    file_name = f"""{len(os.listdir("data")) + 1}.json"""
+    file_path = os.path.join("data", file_name)
+    with open(file_path, "w") as json_file:
+        json.dump(iti, json_file, indent=4)
     return jsonify(iti)
+
+
+@app.route("/info", methods=["POST"])
+def get_infoo():
+    ll = request.get_json()
+
+    f = f"data/{list(os.listdir('data'))[-1]}"
+    with open(f, "r") as file:
+        d = json.load(file)
+    return jsonify(d)
 
 
 if __name__ == "__main__":

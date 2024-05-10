@@ -14,31 +14,36 @@ def extract_number(input_string):
 
 
 def get_crime(city):
-    city = city[0].upper() + city[1:]
-    print(city)
-    response = requests.get(f"https://www.numbeo.com/crime/in/{city}")
-    response_alt = requests.get(f"https://www.numbeo.com/crime/in/{city}-India")
-    safety = None
+    try:
+        city = city[0].upper() + city[1:]
+        print(city)
+        response = requests.get(f"https://www.numbeo.com/crime/in/{city}")
+        response_alt = requests.get(f"https://www.numbeo.com/crime/in/{city}-India")
+        safety = None
 
-    soup = BeautifulSoup(response.content, "html.parser")
-    element = soup.find("td", {"class": "indexValueTd", "style": "text-align: right"})
-    flag = None
-    if element is not None:
-        flag = element
-    else:
-        soup = BeautifulSoup(response_alt.content, "html.parser")
+        soup = BeautifulSoup(response.content, "html.parser")
         element = soup.find(
             "td", {"class": "indexValueTd", "style": "text-align: right"}
         )
-        flag = element
+        flag = None
+        if element is not None:
+            flag = element
+        else:
+            soup = BeautifulSoup(response_alt.content, "html.parser")
+            element = soup.find(
+                "td", {"class": "indexValueTd", "style": "text-align: right"}
+            )
+            flag = element
 
-    # soup = BeautifulSoup(response_alt.content, "html.parser")
+        # soup = BeautifulSoup(response_alt.content, "html.parser")
 
-    if flag:
-        try:
-            safety = extract_number(str(flag))
-            return safety
-        except:
+        if flag:
+            try:
+                safety = extract_number(str(flag))
+                return safety
+            except:
+                return None
+        else:
             return None
-    else:
-        return None
+    except:
+        return "Safety rating not available."

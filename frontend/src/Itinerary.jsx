@@ -1,33 +1,101 @@
+import React, { useEffect, useState } from 'react'; // Import React and useState, useEffect hooks
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import CollapsibleCard from "./components/CollapsibleCard.jsx";
 import { motion } from "framer-motion";
-import manali from "./components/Images/manali.jpg";
-import manali2 from "./components/Images/manali2.jpg";
-import manali3 from "./components/Images/manali3.jpg";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+// Adjusting the imports for marker icons
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+// Fix the default marker icon issue
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: markerIcon2x,
+    iconUrl: markerIcon,
+    shadowUrl: markerShadow,
+});
+
+const Mapss = ({ locations }) => {
+    const defaultPosition = locations[0]?.coordinates || [0, 0]; // Default position to first location or [0, 0] if no locations provided
+
+    return (
+        <MapContainer center={defaultPosition} zoom={13} scrollWheelZoom={false} style={{ height: '400px', width: '100%' }}>
+            <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            {locations.map((location, index) => (
+                <Marker key={index} position={[location.latitude, location.longitude]}>
+                    <Popup>{location.name}</Popup>
+                </Marker>
+            ))}
+        </MapContainer>
+    );
+};
 
 const Itinerary = () => {
     const navigate = useNavigate(); // Initialize useNavigate
+    const [data, setData] = useState({}); // State to store fetched data
+    const [selectedDay, setSelectedDay] = useState(null); // State to store selected day
 
+    useEffect(() => {
+        // Fetch data function
+        const fetchData = async () => {
+            try {
+                // URL of the endpoint you want to send data to
+                const url = 'http://127.0.0.1:8080/info';
+
+                // Data you want to send in the request body
+                const requestData = {
+                    name: 'John Doe',
+                    age: 30,
+                    email: 'john@example.com'
+                };
+
+                // Options object for the fetch request
+                const options = {
+                    method: 'POST', // Set the request method to POST
+                    headers: {
+                        'Content-Type': 'application/json' // Set the appropriate headers
+                    },
+                    body: JSON.stringify(requestData) // Convert the data to JSON string
+                };
+
+                // Make the POST request
+                const response = await fetch(url, options);
+
+                // Check if the response is successful
+                if (!response.ok) {
+                    throw new Error('Error sending data');
+                }
+
+                // Parse the response as JSON
+                const responseData = await response.json();
+
+                // Handle the response data
+                setData(responseData); 
+            } catch (error) {
+                // Handle any errors that occurred during the request
+                console.error('Error:', error);
+            }
+        };
+
+        // Call the fetch data function
+        fetchData();
+    }, []); // Empty dependency array ensures the effect runs only once after the initial render
+    
     // Function to handle card click, navigating to the respective day's URL
     const handleCardClick = (day) => {
-        navigate(`/itinerary/day${day}`);
+        setSelectedDay(day);
     };
 
-    // Simplified variants for card animation
-    const cardVariants = {
-        hidden: { opacity: 0 },
-        visible: { opacity: 1 }
-    };
-
-    // Container variants for staggered children animation
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2 // Adjust the stagger timing as needed
-            }
-        }
+    // Function to close the description card
+    const handleCloseDescription = () => {
+        setSelectedDay(null);
     };
 
     return (
@@ -39,44 +107,39 @@ const Itinerary = () => {
                 transition={{ duration: 1, ease: "easeOut" }}
                 className="text-center mb-8 text-3xl font-medium text-gray-900 dark:text-gray-50 sm:text-3xl"
             >
-                Itinerary
+                Itinerary for {data.desti} 
+                <br></br>
+                Safety rating - {data.safety} 
+                <br></br>
+                (lower the number safer the city)
             </motion.h2>
             <motion.div
                 className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4 mt-14"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
             >
-                {/* Each card is wrapped in a div with an onClick event for navigation */}
-                <div onClick={() => handleCardClick(1)} style={{ cursor: 'pointer' }}>
-                    <motion.div variants={cardVariants} className="w-full">
-                        <CollapsibleCard
-                            dayNumber="1"
-                            imagePath={manali}
-                            text="Settle into a cozy budget hotel and then be mesmerized by the tranquil Golden Temple."
-                        />
-                    </motion.div>
-                </div>
-                <div onClick={() => handleCardClick(2)} style={{ cursor: 'pointer' }}>
-                    <motion.div variants={cardVariants} className="w-full">
-                        <CollapsibleCard
-                            dayNumber="2"
-                            imagePath={manali2}
-                            text="Discover the poignant history of Jallianwala Bagh and explore the Partition Museum."
-                        />
-                    </motion.div>
-                </div>
-                <div onClick={() => handleCardClick(3)} style={{ cursor: 'pointer' }}>
-                    <motion.div variants={cardVariants} className="w-full">
-                        <CollapsibleCard
-                            dayNumber="3"
-                            imagePath={manali3}
-                            text="Delve into Punjab's history and end the day with the patriotic Wagah Border ceremony."
-                        />
-                    </motion.div>
-                </div>
-                {/* More cards can be added here following the same pattern */}
+                {data.desc && data.desc.map((description, index) => (
+                    <div key={index} onClick={() => handleCardClick(index + 1)} style={{ cursor: 'pointer' }}>
+                        <motion.div className="w-full">
+                            <CollapsibleCard
+                                dayNumber={index + 1}
+                                imagePath={data.image_links && data.image_links[index]} // Assuming image_links and desc have the same length
+                                text={selectedDay === index + 1 ? description : (data.summarize && data.summarize[index])}
+                            />
+                        </motion.div>
+                    </div>
+                ))}
             </motion.div>
+            {/* Description card */}
+            {selectedDay !== null && (
+                <motion.div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-4 rounded-lg max-w-md"> {/* Adjusted width here */}
+                        <h3 className="text-xl font-semibold mb-2">Day {selectedDay}</h3>
+                        <p>{data.desc[selectedDay - 1]}</p>
+                        <button onClick={handleCloseDescription} className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg">Close</button>
+                    </div>
+                </motion.div>
+            )}
+            {/* Map embed */}
+            <Mapss locations={data.locations || []} />
         </>
     );
 };

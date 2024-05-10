@@ -6,9 +6,11 @@ from dotenv import load_dotenv
 
 from time import sleep
 
+from pprint import pprint
+
 load_dotenv()
 
-mod = "llama3-70b-8192"
+mod = "mixtral-8x7b-32768"
 
 
 gr_key = os.getenv("GROQ_API_KEY")
@@ -45,7 +47,7 @@ Day 4: Moscow
 
 Morning: Take a stroll in Gorky Park
 Afternoon: Visit the Tretyakov Gallery
-Evening: Have a traditional Russian dinner and prepare for departure). this is just an example of the formatt.""",
+Evening: Have a traditional Russian dinner and prepare for departure). this is just an example of the format. Make it very very detailed and provide as much as information as possible.""",
             }
         ],
         model=mod,
@@ -56,13 +58,13 @@ Evening: Have a traditional Russian dinner and prepare for departure). this is j
         messages=[
             {
                 "role": "user",
-                "content": f"Return one prominent monument or place name from each day, remember just one from each day for example if there are 4 days in the entire itinerary then you should only return 1 prominent place so in total you will return 4 places for 4 days, except for city names from this text and return it in this format in python string separated by commas format. Just the string nothing else, no need for a variable name. no need to add the python format. here is the text {msgg}. Here is an example of a good itinerary ",
+                "content": f"Return prominent monument or place name from this text, except for city names from this text and return it in this format in python string separated by commas format. Just the string nothing else, no need for a variable name. no need to add the python format. here is the text {msgg}. Here is an example of a good itinerary ",
             }
         ],
         model=mod,
     )
     pl = chat_completion_2.choices[0].message.content
-    print(msgg)
+
     return [msgg, pl]
 
 
@@ -104,11 +106,34 @@ Evening: Have a traditional Russian dinner and prepare for departure). this is j
         messages=[
             {
                 "role": "user",
-                "content": f"""Return one prominent monument or place name from each day, remember just one from each day for example if there are 4 days in the entire itinerary then you should only return 1 prominent place so in total you will return 4 places for 4 days, except for city names from this text and return it in this format in python string separated by commas format. Just the string nothing else, no need for a variable name. no need to add the python format. here is the text {msgg}""",
+                "content": f"""Return place and monument names from this text, except for city names from this text and return it in this format in python string separated by commas format. Just the string nothing else, no need for a variable name. no need to add the python format. here is the text {msgg}""",
             }
         ],
         model=mod,
     )
     pl = chat_completion_2.choices[0].message.content
-
+    print(pl)
     return [msgg, pl]
+
+
+def summarize(msgg):
+    sum_txt = []
+    for i in msgg:
+        if i != "":
+            chat_completion = client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": f"""I will give you a text. Summarize it to 1 lines. Here is the text {i}. just return the summarized text alone no need for any other broiler plat text.""",
+                    }
+                ],
+                model=mod,
+            )
+            summ = chat_completion.choices[0].message.content
+            sum_txt.append(summ)
+
+    pprint(sum_txt)
+    return sum_txt
+
+
+# pprint(get_plan("chennai", "madurai", "Cultural", "3"))
