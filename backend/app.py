@@ -19,6 +19,26 @@ import os
 # Specify the folder path
 folder_path = "data"
 
+
+def delete_folder_contents(folder_path):
+    # Check if the folder exists
+    if os.path.exists(folder_path):
+        # Iterate over each item in the folder
+        for item in os.listdir(folder_path):
+            # Create the full path to the item
+            item_path = os.path.join(folder_path, item)
+            # Check if it's a file and delete it
+            if os.path.isfile(item_path):
+                os.unlink(item_path)
+                print("Deleted file:", item_path)
+            # If it's a directory, delete it recursively
+            elif os.path.isdir(item_path):
+                shutil.rmtree(item_path)
+                print("Deleted directory:", item_path)
+    else:
+        print("Folder does not exist:", folder_path)
+
+
 # Check if the folder exists
 if not os.path.exists(folder_path):
     # If it doesn't exist, create the folder
@@ -136,4 +156,6 @@ def get_infoo():
     f = f"data/{list(os.listdir('data'))[-1]}"
     with open(f, "r") as file:
         d = json.load(file)
+
+    delete_folder_contents("data")
     return jsonify(d)
