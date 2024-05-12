@@ -124,7 +124,3 @@ def get_infoo():
     with open(f, "r") as file:
         d = json.load(file)
     return jsonify(d)
-
-
-if __name__ == "__main__":
-    app.run(debug=True, port=8080)
