@@ -14,6 +14,19 @@ from plan import summarize
 app = Flask(__name__)
 
 cors = CORS(app)
+import os
+
+# Specify the folder path
+folder_path = "data"
+
+# Check if the folder exists
+if not os.path.exists(folder_path):
+    # If it doesn't exist, create the folder
+    os.makedirs(folder_path)
+    print("Folder created:", folder_path)
+else:
+    # If it exists, print a message indicating it
+    print("Folder already exists:", folder_path)
 
 
 # T add <Origin city> <Destination city> <Number of People> <Number of days>
