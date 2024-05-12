@@ -136,4 +136,19 @@ def summarize(msgg):
     return sum_txt
 
 
+def places(txt):
+    chat_completion_2 = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": f"Return One prominent monument or place name from this text, except for city names from this text and return it in this format in python string separated by commas format. Just the string nothing else, no need for a variable name. no need to add the python format. here is the text {txt}. Remember just one prominent place and nothing more.",
+            }
+        ],
+        model=mod,
+    )
+    pl = chat_completion_2.choices[0].message.content
+
+    return pl
+
+
 # pprint(get_plan("chennai", "madurai", "Cultural", "3"))

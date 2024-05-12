@@ -17,6 +17,11 @@ cors = CORS(app)
 
 
 # T add <Origin city> <Destination city> <Number of People> <Number of days>
+@app.route("/")
+def hello():
+    return "Hello there. Hope you are doing good!!"
+
+
 @app.route("/plan", methods=["POST"])
 def plan_gen():
     print("Original plan")
@@ -93,9 +98,7 @@ def get_all():
                 i.replace(j, "\n")
     sum_list = summarize(d[1:])
     coo = get_coor(desti)
-    print("GAYYYYYYYYYY")
-    print(coo)
-    print("GAYYYYYYYYYYY")
+
     iti["desc"] = d[1:]
     iti["Places"] = places
     img = get_image(places, int(num_days))
