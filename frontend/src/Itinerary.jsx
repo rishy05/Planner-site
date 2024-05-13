@@ -173,7 +173,12 @@ const Itinerary = () => {
                 <motion.div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-4 rounded-lg max-w-md"> {/* Adjusted width here */}
                         <h3 className="text-xl font-semibold mb-2">Day {selectedDay}</h3>
-                        <p>{data.desc[selectedDay - 1]}</p>
+                        <p>{data.desc[selectedDay - 1].split('\n').map((line, index) => (
+        <React.Fragment key={index}>
+          {line}
+          <br />
+        </React.Fragment>
+      ))}</p>
                         <button onClick={handleCloseDescription} className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg">Close</button>
                     </div>
                     

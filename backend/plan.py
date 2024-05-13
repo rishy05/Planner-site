@@ -47,7 +47,7 @@ Day 4: Moscow
 
 Morning: Take a stroll in Gorky Park
 Afternoon: Visit the Tretyakov Gallery
-Evening: Have a traditional Russian dinner and prepare for departure). this is just an example of the format. Make it very very detailed and provide as much as information as possible. minimum 5000 characters.""",
+Evening: Have a traditional Russian dinner and prepare for departure). this is just an example of the format. Make it very very detailed and provide as much as information as possible. minimum 5000 characters. just add one \n no need for 2 of them""",
             }
         ],
         model=mod,
