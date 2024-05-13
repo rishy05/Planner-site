@@ -19,6 +19,44 @@ L.Icon.Default.mergeOptions({
     shadowUrl: markerShadow,
 });
 
+const handleModifyClick = async (day, data, setData) => {
+    try {
+        console.log("Button clicked!!!!!!!!!!!!")
+        const requestData = {
+            oro_ite: data.desc, // Complete itinerary
+            speci: data.desc[day - 1], // Detailed description at the clicked card
+            sugg: prompt('Please provide your suggestion') // User's suggestion
+        };
+        console.log(requestData)
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        };
+
+        const response = await fetch('http://127.0.0.1:8080/modify', options);
+
+        if (!response.ok) {
+            throw new Error('Failed to modify itinerary');
+        }
+
+        const responseData = await response.json();
+        console.log(responseData)
+        // Update the summary and detailed places with the response data
+        const updatedData = { ...data };
+        updatedData.desc[day - 1] = responseData.modified_ite[0];
+        updatedData.summarize[day - 1] = responseData.modified_summ[0];
+        
+        setData(updatedData);
+        console.log(updatedData);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
+
 const Mapss = ({ locations }) => {
     const defaultPosition = locations[0]?.coordinates || [0, 0]; // Default position to first location or [0, 0] if no locations provided
 
@@ -78,6 +116,7 @@ const Itinerary = () => {
 
                 // Handle the response data
                 setData(responseData); 
+                console.log(data)
             } catch (error) {
                 // Handle any errors that occurred during the request
                 console.error('Error:', error);
@@ -124,6 +163,7 @@ const Itinerary = () => {
                                 imagePath={data.image_links && data.image_links[index]} // Assuming image_links and desc have the same length
                                 text={selectedDay === index + 1 ? description : (data.summarize && data.summarize[index])}
                             />
+                                <button className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg" onClick={() => handleModifyClick(index + 1, data, setData)}>Change</button>                            
                         </motion.div>
                     </div>
                 ))}
@@ -136,6 +176,7 @@ const Itinerary = () => {
                         <p>{data.desc[selectedDay - 1]}</p>
                         <button onClick={handleCloseDescription} className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg">Close</button>
                     </div>
+                    
                 </motion.div>
             )}
             {/* Map embed */}

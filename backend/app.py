@@ -22,21 +22,24 @@ folder_path = "data"
 
 def delete_folder_contents(folder_path):
     # Check if the folder exists
-    if os.path.exists(folder_path):
-        # Iterate over each item in the folder
-        for item in os.listdir(folder_path):
-            # Create the full path to the item
-            item_path = os.path.join(folder_path, item)
-            # Check if it's a file and delete it
-            if os.path.isfile(item_path):
-                os.unlink(item_path)
-                print("Deleted file:", item_path)
-            # If it's a directory, delete it recursively
-            elif os.path.isdir(item_path):
-                shutil.rmtree(item_path)
-                print("Deleted directory:", item_path)
-    else:
-        print("Folder does not exist:", folder_path)
+    try:
+        if os.path.exists(folder_path):
+            # Iterate over each item in the folder
+            for item in os.listdir(folder_path):
+                # Create the full path to the item
+                item_path = os.path.join(folder_path, item)
+                # Check if it's a file and delete it
+                if os.path.isfile(item_path):
+                    os.unlink(item_path)
+                    print("Deleted file:", item_path)
+                # If it's a directory, delete it recursively
+                elif os.path.isdir(item_path):
+                    shutil.rmtree(item_path)
+                    print("Deleted directory:", item_path)
+        else:
+            print("Folder does not exist:", folder_path)
+    except:
+        pass
 
 
 # Check if the folder exists
@@ -97,17 +100,6 @@ def get_safety():
     return jsonify({"Response": ressss})
 
 
-@app.route("/modify", methods=["POST"])
-def get_modify():
-    print("Entering modification")
-    ori_ite = request.form.get("ori_ite")
-    sugg = request.form.get("sugg")
-
-    mod = modify(ori_ite, sugg)
-
-    return jsonify({"modified_ite": mod[0], "modified_places": mod[1]})
-
-
 @app.route("/all", methods=["POST"])
 def get_all():
     # place_names = request.form.get("place")
@@ -157,5 +149,18 @@ def get_infoo():
     with open(f, "r") as file:
         d = json.load(file)
 
-    delete_folder_contents("data")
+    # delete_folder_contents("data")
     return jsonify(d)
+
+
+@app.route("/modify", methods=["POST"])
+def get_modify():
+    print("Entering modification")
+    data = request.get_json()
+    ori_ite = data.get("ori_ite")
+    speci = data.get("speci")
+    sugg = data.get("sugg")
+
+    mod = modify(ori_ite, speci, sugg)
+
+    return jsonify({"modified_ite": [mod[0]], "modified_summ": [mod[1]]})

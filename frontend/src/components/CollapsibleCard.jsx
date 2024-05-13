@@ -4,7 +4,7 @@ import starIcon from './Images/star.png';
 import headerIcon from './Images/Avatar.png';
 
 
-const CollapsibleCard = ({ dayNumber, imagePath, text }) => {
+const CollapsibleCard = ({ dayNumber, imagePath, text}) => {
     return (
       <div className="card">
         <div className="card-header">
@@ -19,12 +19,6 @@ const CollapsibleCard = ({ dayNumber, imagePath, text }) => {
             </a>
           )}
           <p className="card-text">{text}</p>
-          <div className="card-actions">
-            <button className="action-btn save-btn">
-              <img src={starIcon} alt="Star" className="star-icon" /> Save
-            </button>
-            <button className="action-btn comment-btn">Change</button>
-          </div>
         </div>
       </div>
     );

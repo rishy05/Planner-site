@@ -3,7 +3,7 @@ import useStore from "../../useStore.js"; // Import your Zustand store
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { useState, useEffect } from 'react';
 import { Loader } from '../Loader'; // Use named import instead.
-
+import 'leaflet/dist/leaflet.css';
 
 // const [da, setDa] = useState('')
 
@@ -21,17 +21,19 @@ const Form = () => {
         { text: 'Have Fun!' }
     ];
 
-    useEffect(() => {
-        if (loading) {
-            const timer = setTimeout(() => {
-                navigate('/itinerary');
-            }, 14000); // Wait for 5 seconds before navigating
+    // useEffect(() => {
+    //     if (loading) {
+    //         const timer = setTimeout(() => {
+    //             navigate('/itinerary');
+    //         }, 14000); // Wait for 5 seconds before navigating
 
-            return () => clearTimeout(timer);
-        }
-    }, [loading, navigate]);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [loading, navigate]);
 
     const handleSubmit = async (e) => {
+        setLoading(true); // Show the loader when the form is submitted
+
         e.preventDefault();
         
         try {
@@ -49,12 +51,11 @@ const Form = () => {
             }
       
             const dat = await res.json();
-            // console.log(dat) 
-
+            console.log(dat) 
+            navigate('/itinerary');
         } catch (error) {
             console.error('Error:', error);
           }
-        setLoading(true); // Show the loader when the form is submitted
     };
     const [originInput, setOriginInput] = useState('');
 

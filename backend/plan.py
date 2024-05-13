@@ -68,34 +68,12 @@ Evening: Have a traditional Russian dinner and prepare for departure). this is j
     return [msgg, pl]
 
 
-def modify(ini_ite, sugg):
+def modify(ini_ite, speci, sugg):
     chat_completion = client.chat.completions.create(
         messages=[
             {
                 "role": "user",
-                "content": f"""You have already generated an amazing Itinerary, but the user wants some changes. Here is the original itinerary {ini_ite}. Here are the changes user wants {sugg}. Just send the modified itinerary no need for any other texts just the itinerary. If the change is specific to some specific day, change only that day and not disturb other days and combine it with the original. This how it should look in the end an example (Day 1: Paris
-
-Morning: Visit Eiffel Tower and take a river cruise on the Seine
-Afternoon: Explore the Louvre Museum
-Evening: Dine at Montmartre and watch a cabaret show at Moulin Rouge
-
-Day 2: Paris to Moscow
-
-Morning: Take a flight from Charles de Gaulle Airport to Moscow
-Afternoon: Check-in at your hotel and rest
-Evening: Visit Red Square and St. Basil's Cathedral
-
-Day 3: Moscow
-
-Morning: Explore the Kremlin and its cathedrals
-Afternoon: Visit the State Historical Museum
-Evening: Watch a ballet performance at the Bolshoi Theatre
-
-Day 4: Moscow
-
-Morning: Take a stroll in Gorky Park
-Afternoon: Visit the Tretyakov Gallery
-Evening: Have a traditional Russian dinner and prepare for departure). this is just an example of the formatt.). This is just an example.""",
+                "content": f"""This is the itinerary you produced {ini_ite} and the user wants changes at this part {speci} and the suggestion is {sugg}. Just return the changed part and not the entire thing. No need for any broiler plate texts before the response just the changed plan at that specific place.""",
             }
         ],
         model=mod,
@@ -106,12 +84,13 @@ Evening: Have a traditional Russian dinner and prepare for departure). this is j
         messages=[
             {
                 "role": "user",
-                "content": f"""Return place and monument names from this text, except for city names from this text and return it in this format in python string separated by commas format. Just the string nothing else, no need for a variable name. no need to add the python format. here is the text {msgg}""",
+                "content": f"""I will give you a text. Summarize it to 1 lines. Here is the text {msgg}. just return the summarized text alone no need for any other broiler plat text.""",
             }
         ],
         model=mod,
     )
     pl = chat_completion_2.choices[0].message.content
+    print(msgg)
     print(pl)
     return [msgg, pl]
 
