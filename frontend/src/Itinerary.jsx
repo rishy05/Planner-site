@@ -139,7 +139,7 @@ const Itinerary = () => {
                 </motion.div>
             )}
             {/* Map embed */}
-            <Mapss locations={data.locations || []} />
+
         </>
     );
 };
