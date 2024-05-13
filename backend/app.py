@@ -149,7 +149,7 @@ def get_infoo():
     with open(f, "r") as file:
         d = json.load(file)
 
-    # delete_folder_contents("data")
+    delete_folder_contents("data")
     return jsonify(d)
 
 
